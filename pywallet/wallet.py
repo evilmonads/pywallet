@@ -9,8 +9,8 @@ from .network import *
 import inspect
 
 
-def generate_mnemonic(strength=128):
-    _, seed = HDPrivateKey.master_key_from_entropy(strength=strength)
+def generate_mnemonic(strength=128, entropy=None):
+    _, seed = HDPrivateKey.master_key_from_entropy(strength=strength, entropy=entropy)
     return seed
 
 

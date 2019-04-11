@@ -1298,7 +1298,7 @@ class HDPrivateKey(HDKey, PrivateKeyBase):
             Mnemonic.to_seed(mnemonic, passphrase))
 
     @staticmethod
-    def master_key_from_entropy(passphrase='', strength=128):
+    def master_key_from_entropy(passphrase='', strength=128, entropy=None):
         """ Generates a master key from system entropy.
 
         Args:
@@ -1306,6 +1306,7 @@ class HDPrivateKey(HDKey, PrivateKeyBase):
                a multiple of 32 between 128 and 256.
             passphrase (str): An optional passphrase for the generated
                mnemonic string.
+            entropy (str): Get the entropy created by a user.
 
         Returns:
             HDPrivateKey, str:
@@ -1317,8 +1318,13 @@ class HDPrivateKey(HDKey, PrivateKeyBase):
             raise ValueError("strength must be a multiple of 32")
         if strength < 128 or strength > 256:
             raise ValueError("strength should be >= 128 and <= 256")
-        entropy = rand_bytes(strength // 8)
+
+        ##
         m = Mnemonic(language='english')
+
+        if entropy is None:
+            raise TypeError("Entropy entered is null")
+
         n = m.to_mnemonic(entropy)
         return HDPrivateKey.master_key_from_seed(
             Mnemonic.to_seed(n, passphrase)), n
